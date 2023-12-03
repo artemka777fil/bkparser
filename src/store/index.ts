@@ -1,9 +1,4 @@
-import {
-    combineReducers,
-    configureStore,
-    createAction,
-    createSlice,
-} from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { totalOddsXBetReducer } from "./slices/1xBet/TotalOdds";
 import { handicapOddsXBetReducer } from "./slices/1xBet/HandicapOdds";
 import { otherOddsXBetReducer } from "./slices/1xBet/OtherOdds";
