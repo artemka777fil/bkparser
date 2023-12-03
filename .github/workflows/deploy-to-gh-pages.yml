@@ -3,7 +3,7 @@ on: [push]
 permissions:
     contents: write
 jobs:
-    build-and-deploy:
+    build:
         runs-on: windows-latest
         steps:
             - name: Checkout
@@ -27,19 +27,18 @@ jobs:
                   REACT_APP_APP_ID: ${{ secrets.REACT_APP_APP_ID }}
                   REACT_APP_XBET: ${{ secrets.REACT_APP_XBET }}
                   REACT_APP_FBTY: ${{ secrets.REACT_APP_FBTY }}
-
-            - name: Deploy
-              concurrency: ci-${{ github.ref }}
-              needs: [build]
-              runs-on: ubuntu-latest
-              steps:
-                  - name: Download Artifacts
+    deploy:
+        runs-on: ubuntu-latest
+        needs: [build]
+        concurrency: ci-${{ github.ref }}
+        steps:
+            - name: Download Artifacts
                     uses: actions/download-artifact@v1
                     with:
                         name: site
 
-                  - name: Deploy
-                    uses: JamesIves/github-pages-deploy-action@v4
-                    with:
-                        folder: site
-                        BRANCH: gh-pages
+            - name: Deploy
+              uses: JamesIves/github-pages-deploy-action@v4
+              with:
+                  folder: site
+                  BRANCH: gh-pages
