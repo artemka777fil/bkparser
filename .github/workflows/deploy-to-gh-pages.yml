@@ -9,10 +9,10 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v3
 
-            - name: Build
+            - name: Install and Build
               run: |
                   npm install
-                  CI=false && react-scripts build
+                  npm react-scripts build
               env:
                   REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
                   REACT_APP_AUTH_DOMAIN: ${{ secrets.REACT_APP_AUTH_DOMAIN }}
@@ -24,7 +24,7 @@ jobs:
                   REACT_APP_FBTY: ${{ secrets.REACT_APP_FBTY }}
 
             - name: Deploy
-              uses: JamesIves/github-pages-deploy-action@4.0.0
+              uses: JamesIves/github-pages-deploy-action@v4
               with:
                   BRANCH: gh-pages
                   FOLDER: build
