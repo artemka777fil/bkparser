@@ -33,9 +33,9 @@ jobs:
         concurrency: ci-${{ github.ref }}
         steps:
             - name: Download Artifacts
-                    uses: actions/download-artifact@v1
-                    with:
-                        name: site
+              uses: actions/download-artifact@v1
+              with:
+                  name: site
 
             - name: Deploy
               uses: JamesIves/github-pages-deploy-action@v4
