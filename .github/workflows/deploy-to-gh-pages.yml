@@ -11,9 +11,8 @@ jobs:
 
             - name: Install and Build
               run: |
-                  unset CI
-                  npm install
-                  npm run build
+                  npm ci
+                  CI='' npm run build
             - name: Upload Artifacts
               uses: actions/upload-artifact@v1
               with:
