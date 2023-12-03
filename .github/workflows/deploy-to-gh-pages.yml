@@ -3,16 +3,21 @@ on: [push]
 permissions:
     contents: write
 jobs:
-    build:
+    build-and-deploy:
         runs-on: windows-latest
         steps:
-            - name: Checkout 🛎️
+            - name: Checkout
               uses: actions/checkout@v3
 
             - name: Install and Build
               run: |
                   npm ci
                   npm run build
+            - name: Upload Artifacts
+              uses: actions/upload-artifact@v1
+              with:
+                  name: site
+                  path: build
               env:
                   REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
                   REACT_APP_AUTH_DOMAIN: ${{ secrets.REACT_APP_AUTH_DOMAIN }}
@@ -23,25 +28,18 @@ jobs:
                   REACT_APP_XBET: ${{ secrets.REACT_APP_XBET }}
                   REACT_APP_FBTY: ${{ secrets.REACT_APP_FBTY }}
 
-            - name: Upload Artifacts
-              uses: actions/upload-artifact@v1
-              with:
-                  name: site
-                  path: build
-    deploy:
-        needs: [build]
-        runs-on: ubuntu-latest
-        steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+            - name: Deploy
+              concurrency: ci-${{ github.ref }}
+              needs: [build]
+              runs-on: ubuntu-latest
+              steps:
+                  - name: Download Artifacts
+                    uses: actions/download-artifact@v1
+                    with:
+                        name: site
 
-      - name: Download Artifacts
-        uses: actions/download-artifact@v1
-        with:
-          name: site
-
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          BRANCH: gh-pages
-          FOLDER: site
+                  - name: Deploy
+                    uses: JamesIves/github-pages-deploy-action@v4
+                    with:
+                        folder: site
+                        BRANCH: gh-pages
