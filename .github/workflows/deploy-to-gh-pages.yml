@@ -45,3 +45,4 @@ jobs:
               with:
                   folder: site
                   BRANCH: gh-pages
+                  token: ${{ secrets.ACCESS_TOKEN }}
