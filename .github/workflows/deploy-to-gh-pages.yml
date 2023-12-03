@@ -13,6 +13,8 @@ jobs:
               run: |
                   npm ci
                   npm run build
+              env:
+                  CI: false
             - name: Upload Artifacts
               uses: actions/upload-artifact@v1
               with:
